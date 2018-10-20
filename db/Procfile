@@ -1,1 +1,1 @@
-web: gunicorn dbapp.wsgi
+web: gunicorn db.wsgi

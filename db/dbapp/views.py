@@ -329,6 +329,8 @@ def customer(request,storeid):
 
 
 	return render(request,"customer.html",{'items':items,'storeid':storeid, "cart":cart})
+
+
 def generate_pdf(pk):
 	y = 700
 	buffer = BytesIO()
