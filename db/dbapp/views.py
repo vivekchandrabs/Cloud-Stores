@@ -66,41 +66,43 @@ def signup(request):
 
 def signin(request):
 	user = request.user
-	if user.is_authenticated:
-		username=str(request.user)
-		if user.userdetail.user_type == 1:
-			url='/'+username+'/owner/'
-			return redirect(url)
-		else:
-			storeid=user.userdetail.storeid
-			storeid=str(storeid)
-			url='/shop/'+storeid+'/checkout/'
-			return redirect(url)
-
-	if request.method == "POST":
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(request, username=username, 
-			password=password)
-		if user is None:
-			return render (request,'signin.html',{'caution':"User Name or Password Might be Wrong"})
-		if user is not None:
+	try:
+		if user.is_authenticated:
+			username=str(request.user)
 			if user.userdetail.user_type == 1:
-				login(request, user)
-				username=request.user.username
-				username=str(username)
-				
 				url='/'+username+'/owner/'
 				return redirect(url)
-			elif user.userdetail.user_type == 2 and user.username==username:
-				login(request, user)
-				username=request.user.username
+			else:
 				storeid=user.userdetail.storeid
 				storeid=str(storeid)
 				url='/shop/'+storeid+'/checkout/'
 				return redirect(url)
+	except:
 
-			# return render(request,'additem.html')
+		if request.method == "POST":
+			username = request.POST['username']
+			password = request.POST['password']
+			user = authenticate(request, username=username, 
+				password=password)
+			if user is None:
+				return render (request,'signin.html',{'caution':"User Name or Password Might be Wrong"})
+			if user is not None:
+				if user.userdetail.user_type == 1:
+					login(request, user)
+					username=request.user.username
+					username=str(username)
+					
+					url='/'+username+'/owner/'
+					return redirect(url)
+				elif user.userdetail.user_type == 2 and user.username==username:
+					login(request, user)
+					username=request.user.username
+					storeid=user.userdetail.storeid
+					storeid=str(storeid)
+					url='/shop/'+storeid+'/checkout/'
+					return redirect(url)
+
+				# return render(request,'additem.html')
 
 	return render(request, "signin.html")
 
