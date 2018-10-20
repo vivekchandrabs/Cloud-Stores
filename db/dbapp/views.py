@@ -5,9 +5,8 @@ from dbapp.models import UserDetail,Store,Item,OrderShop,Order_Item,Cart
 from django.core.mail import EmailMessage
 
 from django.utils import timezone    
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
+
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic import View
 from django.utils import timezone
@@ -41,7 +40,11 @@ def signup(request):
 				print(storeid)
 				no_of_stores=0
 				
-				profile=UserDetail(user=user,user_type=user_type,address=address,no_of_stores=no_of_stores,storeid=storeid,phone_no=phone)
+				profile=UserDetail(user=user,user_type=user_type,
+									address=address,
+									no_of_stores=no_of_stores,
+									storeid=storeid,
+									phone_no=phone)
 				profile.save()
 				return redirect('/signin/') 
 
@@ -51,7 +54,12 @@ def signup(request):
 			elif user_type ==1:
 				no_of_stores=0
 				storeid=0
-				profile=UserDetail(user=user,user_type=user_type,no_of_stores=no_of_stores,storeid=storeid,address=address,phone_no=phone)
+				profile=UserDetail(user=user,
+									user_type=user_type,
+									no_of_stores=no_of_stores,
+									storeid=storeid,
+									address=address,
+									phone_no=phone)
 				profile.save()
 				return redirect('/signin/') 
 
@@ -66,47 +74,44 @@ def signup(request):
 
 def signin(request):
 	user = request.user
-	if user is not None:
-		
-		if user.is_authenticated:
-			username=str(request.user)
+	if user.is_authenticated:
+		if user.userdetail.user_type == 1:
+			url='/'+username+'/owner/'
+			return redirect(url)
+		else:
+			storeid=user.userdetail.storeid
+			storeid=str(storeid)
+			url='/shop/'+storeid+'/checkout/'
+			return redirect(url)
+
+	if request.method == "POST":
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, 
+			password=password)
+		if user is None:
+			return render (request,'signin.html',{'caution':"User Name or Password Might be Wrong"})
+		if user is not None:
 			if user.userdetail.user_type == 1:
+				login(request, user)
+				username=request.user.username
+				username=str(username)
+				
 				url='/'+username+'/owner/'
 				return redirect(url)
-			else:
+			elif user.userdetail.user_type == 2 and user.username==username:
+				login(request, user)
+				username=request.user.username
 				storeid=user.userdetail.storeid
 				storeid=str(storeid)
 				url='/shop/'+storeid+'/checkout/'
 				return redirect(url)
-	else:
-
-		if request.method == "POST":
-			username = request.POST['username']
-			password = request.POST['password']
-			user = authenticate(request, username=username, 
-				password=password)
-			if user is None:
-				return render (request,'signin.html',{'caution':"User Name or Password Might be Wrong"})
-			if user is not None:
-				if user.userdetail.user_type == 1:
-					login(request, user)
-					username=request.user.username
-					username=str(username)
-					
-					url='/'+username+'/owner/'
-					return redirect(url)
-				elif user.userdetail.user_type == 2 and user.username==username:
-					login(request, user)
-					username=request.user.username
-					storeid=user.userdetail.storeid
-					storeid=str(storeid)
-					url='/shop/'+storeid+'/checkout/'
-					return redirect(url)
 
 				# return render(request,'additem.html')
 
 	return render(request, "signin.html")
 
+@login_required
 def Take_Text(request,user_name):
 
 	if request.method=='POST':
@@ -117,6 +122,7 @@ def Take_Text(request,user_name):
 		return HttpResponse('success')
 	return render(request,'base.html')
 
+@login_required
 def owner(request,owner):
 	print(owner)
 	user=request.user
@@ -125,7 +131,7 @@ def owner(request,owner):
 
 	return render(request,'owner.html',{'user_name':owner,'show':storeofuser})
 	
-
+@login_required
 def addstore(request,owner):
 	print(owner)
 	owner=request.user.username
@@ -149,6 +155,7 @@ def addstore(request,owner):
 	return render(request,'addstore.html',{'user_name':owner})
 
 
+@login_required
 def additem(request,storeid):
 	owner=(request.user.username)
 	user=request.user
@@ -173,6 +180,7 @@ def additem(request,storeid):
 	
 	return render(request,'additem.html',{'show':'','user_name':owner, "storeid":storeid,"user_type":user_type})
 
+@login_required
 def viewitem(request,storeid):
 	owner=request.user.username
 	user=request.user
@@ -188,6 +196,7 @@ def viewitem(request,storeid):
 	except:
 		return HttpResponse('no items in this store')
 
+@login_required
 def chooseshop(request,storeid):#this is the page where owner can choose the shop
 	storeid=str(storeid)
 	user=request.user.username
@@ -199,6 +208,7 @@ def chooseshop(request,storeid):#this is the page where owner can choose the sho
 	except:
 		return render(request,"chooseshop.html",{'show':'','storeid':storeid,"user_name":user})
 
+@login_required
 def choosestore(request,owner):
 	user=request.user
 	user=UserDetail.objects.get(user=user)
@@ -209,6 +219,7 @@ def choosestore(request,owner):
 	except:
 		return render(request,'choosestore.html',{'user_name':owner,"show":storeofuser})
 
+@login_required
 def orderitems(request,storeid,shopid):#this is the page where the owner can enter the item details
 	print("hello")
 	owner=request.user.username
@@ -237,7 +248,7 @@ def orderitems(request,storeid,shopid):#this is the page where the owner can ent
 
 	return render(request,'orderitems.html',{'storeid':storeid,'shopid':shopid,"user_name":owner})
 
-
+@login_required
 def addshop(request,storeid):
 	owner=request.user.username
 	if request.method=='POST':
@@ -259,6 +270,7 @@ def addshop(request,storeid):
 	print('here')
 	return render(request,'addshop.html',{'storeid':storeid,"user_name":owner})
 
+@login_required
 def deleteshop(request,owner):
 	username=request.user.username
 	user=request.user
@@ -270,7 +282,7 @@ def deleteshop(request,owner):
 		return render(request,"delete.html",{"user_name":username,"show":''})
 
 	
-
+@login_required
 def deletestores(request,storeid):
 	deletestore=Store.objects.get(pk=storeid)
 	deletestore.delete()
@@ -292,7 +304,19 @@ def deletestores(request,storeid):
 # 	cart=Cart.objects.get(shopkeeper=user)
 # 	email=request.POST.get('email')
 # 	#render the template here and email
+	# storeitems=Item.objects.get(store=store)
+	# for i in cart.items:#this is the arraylist of arrayfield
+	# 	itemid=i[0]
+	# 	item=Item.objects.get(pk=itemid)
+	# 	item.quantity=item.quantity-i[1]
+	# 	item.save()
+	# 	msg = EmailMessage("Purchase Order", message, to=[email])
+	# 	msg.send()
 
+
+
+
+@login_required
 def customer(request,storeid):
 	store=Store.objects.get(pk=storeid)
 	user=request.user
