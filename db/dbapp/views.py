@@ -56,9 +56,12 @@ def signup(request):
 				return redirect('/signin/') 
 
 			
-						
-	store=Store.objects.all()
-	return render(request, "signup.html",{'store':store})
+	try:				
+		store=Store.objects.all()
+		return render(request, "signup.html",{'store':store})
+	except:
+		
+		return render(request, "signup.html",{'store':''})
 
 
 def signin(request):
