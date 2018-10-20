@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+	<head>
+		<title>Choose Store</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="icon" href="{% static 'images/store.png' %}" type="image/png" sizes="16x16">
+		<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" href="/{{user_name}}/owner/"><img src="{% static 'images/store.png' %}" height="30px"> Stores</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<a class="nav-item nav-link active" href="/{{user_name}}/owner/">Home<span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="/{{user_name}}/addstore/">Add Shop<span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="/{{user_name}}/orderitems/">Order Items<span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="/{{user_name}}/delete/">Delete Shop<span class="sr-only">(current)</span></a>
+						<a class="btn btn-outline-success" href="/logout/"  style="float-right">Logout<span class="sr-only">(current)</span></a>
+						
+					</div>
+				</div>
+			</div>
+		</nav>
+		<br>
+		<div class="container">
+			<h4>Select a shop:</h4>
+
+			<div class="card shadow-lg" style="width: 70rem; ">
+				<div class="card-body" >
+					{% for i in show%}
+						<div class="card border-dark md-3" style="width: 22rem;display:inline-block; margin-bottom:10px;">
+							
+							<div class="card-body" style="text-align:center;background-color:#f1f2f6;">
+								<h5 class="card-title">{{i.name}}</h5>
+								<br>
+								
+								<a href="/{{i.id}}/chooseshop/" class="btn btn-md btn-outline-primary" >Select</a>
+								
+								
+							</div>
+						</div>
+						{%endfor%}
+					</div>
+				</div>
+				
+			</div>
+		</body>
+	</html>

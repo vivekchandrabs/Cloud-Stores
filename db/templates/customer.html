@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<title>Order Checkout Page</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="icon" href="{% static 'images/store.png' %}" type="image/png" sizes="16x16">
+		<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+		
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" href="/shop/{{storeid}}/checkout/"><img src="{% static 'images/store.png' %}" height="30px"> Stores</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<a class="nav-item nav-link active" href="/shop/{{storeid}}/checkout/">Home<span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="/{{storeid}}/additems/">Add Items<span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="/{{storeid}}/viewitems/">View Items<span class="sr-only">(current)</span></a>
+						<a class="btn btn-outline-success inline-block mb-3 mb-md-0 ml-md-5" href="/logout/" >Logout<span class="sr-only">(current)</span></a>
+					</div>
+				</div>
+			</div>
+		</nav>
+		{# End of Nav #}
+		<br><br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<div>
+						<form class="form"  action="/shop/{{storeid}}/checkout/" method="POST" >
+							{% csrf_token %}
+							<div class="row">
+								<div class="col-6">
+									<select class="form-control" id="item-list" name="itemname">
+										{% for item in items %}
+											<option id="item{{item.id}}" value="{{item.id}}"><b>{{item.name}}</b></option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-3">
+									<input type="text" class="form-control" id="item-quant" placeholder="Quantity" name="quantity">
+								</div>
+								<div class="col-3">
+									<button type="submit" class="btn btn-md btn-outline-primary" id="item-add">Add</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<br><br>
+					<div class="card  shadow-lg" style="width: 31rem;" style="padding-right:100px;">
+				<div class="card-body">
+						<div id="my-table">
+							<table class="table table-bordered " width="100%" >
+								<thead >
+									
+									<tr>
+										<td width="10px"><b>ID</b></td>
+										<td><b>Item Name</b></td>
+										<td><b>Quantity</b></td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody  id="table-body">
+									{% for k,v in cart.items %}
+									<tr>
+									<td width="10px">{{k.id}}</td>
+										<td>{{k.name}}</td>
+										<td>{{v}}</td>
+										<td></td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					</div>
+					<br>
+					<a class="btn btn-md btn-outline-success" href="/sendemail/">Submit<span class="sr-only">(current)</span></a>
+				</div>
+				<div class="col-md-6">
+					<label>Customer Email:</label>
+					<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="name">
+
+
+					<div style="padding-top:50px">
+					<div class=" border-dark shadow-lg"  >
+					<div class="card" style="width: 38rem">
+						<div class="card-body" style="background-color:#c8d6e5;">
+							
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+							
+						</div>
+					</div>
+				</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	
+</html>
