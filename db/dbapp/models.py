@@ -20,7 +20,7 @@ class UserDetail(models.Model):
 	address=models.CharField(blank=True,max_length=140)
 	no_of_stores=models.IntegerField(blank=True,default=0)
 	storeid=models.IntegerField(default=0)
-	phone_no=models.IntegerField(default=0)
+	phone_no=models.CharField(max_length=13)
 
 class Store(models.Model):
 	name=models.CharField(blank=True,max_length=100)

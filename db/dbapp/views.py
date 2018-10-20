@@ -27,7 +27,7 @@ def signup(request):
 		print(user_type)
 		address=request.POST.get("address")
 		phone=request.POST.get("phone")
-		phone=int(phone)
+		
 		try:
 			user = User.objects.get(username=username)
 			return render(request,'signup.html',{'show':'username already taken'})
@@ -199,9 +199,12 @@ def chooseshop(request,storeid):#this is the page where owner can choose the sho
 def choosestore(request,owner):
 	user=request.user
 	user=UserDetail.objects.get(user=user)
-	storeofuser=Store.objects.filter(owner=user)
+	try:
+		storeofuser=Store.objects.filter(owner=user)
 
-	return render(request,'choosestore.html',{'user_name':owner,"show":storeofuser})
+		return render(request,'choosestore.html',{'user_name':owner,"show":''})
+	except:
+		return render(request,'choosestore.html',{'user_name':owner,"show":storeofuser})
 
 def orderitems(request,storeid,shopid):#this is the page where the owner can enter the item details
 	print("hello")
@@ -257,9 +260,13 @@ def deleteshop(request,owner):
 	username=request.user.username
 	user=request.user
 	user=UserDetail.objects.get(user=user)
-	storeofuser=Store.objects.filter(owner=user)
+	try:
+		storeofuser=Store.objects.filter(owner=user)
+		return render(request,"delete.html",{"user_name":username,"show":storeofuser})
+	except:
+		return render(request,"delete.html",{"user_name":username,"show":''})
 
-	return render(request,"delete.html",{"user_name":username,"show":storeofuser})
+	
 
 def deletestores(request,storeid):
 	deletestore=Store.objects.get(pk=storeid)
@@ -276,6 +283,12 @@ def deletestores(request,storeid):
 # 	username=request.user.username
 # 	url="/"+username+"/delete/"
 # 	return redirect(url)
+# def checkout(request,storeid):
+# 	store=Store.objects.get(pk=storeid)
+# 	user=request.user
+# 	cart=Cart.objects.get(shopkeeper=user)
+# 	email=request.POST.get('email')
+# 	for i,k,
 
 def customer(request,storeid):
 	store=Store.objects.get(pk=storeid)
