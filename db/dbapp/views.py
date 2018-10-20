@@ -66,7 +66,8 @@ def signup(request):
 
 def signin(request):
 	user = request.user
-	try:
+	if user is not None:
+		
 		if user.is_authenticated:
 			username=str(request.user)
 			if user.userdetail.user_type == 1:
@@ -77,7 +78,7 @@ def signin(request):
 				storeid=str(storeid)
 				url='/shop/'+storeid+'/checkout/'
 				return redirect(url)
-	except:
+	else:
 
 		if request.method == "POST":
 			username = request.POST['username']
@@ -290,7 +291,7 @@ def deletestores(request,storeid):
 # 	user=request.user
 # 	cart=Cart.objects.get(shopkeeper=user)
 # 	email=request.POST.get('email')
-# 	for i,k,
+# 	#render the template here and email
 
 def customer(request,storeid):
 	store=Store.objects.get(pk=storeid)
