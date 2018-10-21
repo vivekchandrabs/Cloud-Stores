@@ -44,22 +44,13 @@ def signup(request):
 			return render(request,'signup.html',{'show':'username already taken'})
 			
 		except:			
-			
-		
+
 			if user_type == 2:
-
-
-
-
 				storeid=request.POST.get('storeid')
-
 				print(storeid)
 				store=Store.objects.get(pk=storeid)
-
 				code=store.invitecode
 				print(code)
-
-
 				if invitecode == code :
 					print("ksfksdfndsn")
 					user = User.objects.create_user(username, email, password)
@@ -77,7 +68,7 @@ def signup(request):
 
 					return redirect('/signin/') 
 				else:
-					return HttpResponse('wrong invite code')
+					return render(request,'signup.html',{'notice':"wrong invite code"})
 
 			
 				
@@ -173,13 +164,14 @@ def addstore(request,owner):
 	print('here in the addstore')
 	if request.method=="POST":
 		name=request.POST.get('storename')
+		invitecode=request.POST.get('invitecode')
 		user=request.user
 		user.userdetail.no_of_stores+=1
 		user.userdetail.save()
 		user=UserDetail.objects.get(user=user)
 		print(type(user))
 
-		store=Store(name=name,owner=user)
+		store=Store(name=name,owner=user,invitecode=invitecode)
 		store.save()
 		# url='/'+owner+'/owner/'
 		storeofuser=Store.objects.filter(owner=user)
@@ -270,8 +262,7 @@ def orderitems(request,storeid,shopid):#this is the page where the owner can ent
 		shopkeeper=ordershop.shopkeeper_name
 		phone=ordershop.phone_no
 		storesname=ordershop.store.name
-		message="Purchase order\n\
-		store name: "+storesname+"\nshopkeeper name: "+shopkeeper+"\nphone:"+phone+"\n address:"+address+"\nitemname: "+itemname+"\nquantity: "+quantity+"\n  Thank you"
+		message="Purchase order\nstore name: "+storesname+"\nshopkeeper name: "+shopkeeper+"\nphone:"+phone+"\n address:"+address+"\nitemname: "+itemname+"\nquantity: "+quantity+"\n  Thank you"
 		print(message)
 		print(email)
 		msg = EmailMessage("Purchase Order", message, to=[email])
@@ -450,7 +441,7 @@ def checkoutcust(request, storeid):
 	message=get_template('email/notice.html').render({'less_items':less_items})
 	storeowner_email=store.owner.user.email
 	print(storeowner_email)
-	msg = EmailMessage(f"Cash Bill from {store.name}", message, to=[storeowner_email])
+	msg = EmailMessage(f"Product Notification {store.name}", message, to=[storeowner_email])
 	msg.content_subtype = "html"
 	msg.send()
 

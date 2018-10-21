@@ -4,7 +4,7 @@
 	<head>
 		<title>add store</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<link href='https://fonts.googleapis.com/css?family=Autour One' rel='stylesheet'>
+		<link href='https://fonts.googleapis.com/css?family=Fira Sans' rel='stylesheet'>
 		<link rel="icon" href="{% static 'images/store.png' %}" type="image/png" sizes="16x16">
 		<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
 	</head>
@@ -36,7 +36,7 @@
 				<div class="col-md-4"></div>
 				<div class="col-md-4">
 					<div class="card shadow-lg border-dark mb-3"  style="width: 35rem;" >
-						<div class="card-header bg-transparent border-dark" style="font-family:Autour One; text-align:center"><h3>ADD STORE</h3></div>
+						<div class="card-header bg-transparent border-dark" style="font-family:Fira Sans; text-align:center"><h3>ADD STORE</h3></div>
 						<div class="card body" style="background-color:#f1f2f6;">
 							<br>
 							
@@ -48,14 +48,23 @@
 									
 									
 									<div class="form-group row">
-										<label style="font-family:Autour One;  padding-left:25px;" class="col-sm-4 col-form-label">Shop Name:</label>
+										<label style="font-family:Fira Sans;  padding-left:25px;" class="col-sm-4 col-form-label">Shop Name:</label>
 										<div class="col-sm-7">
-											<input type="text" name="storename" class="form-control" style="font-family:Autour One;"placeholder="Enter Shop Name" >
+											<input type="text" name="storename" class="form-control" style="font-family:Fira Sans;"placeholder="Enter Shop Name" >
 										</div>
 									</div>
 									
 								</div>
+
+								<div class="form-group row">
+										<label style="font-family:Fira Sans;  padding-left:25px;" class="col-sm-4 col-form-label">Invite Code:</label>
+										<div class="col-sm-7">
+											<input type="text" name="invitecode" class="form-control" style="font-family:Fira Sans;"placeholder="Enter Invite Code" >
+										</div>
+									</div>
+
 								<br>
+
 								<div style="text-align:center">
 									<button class="btn btn-md btn-outline-primary" type="submit" style="margin:10px;">Add Store</button>
 								</div>
