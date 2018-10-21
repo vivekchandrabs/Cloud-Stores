@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Notice</title>
+</head>
+<body>
+
+
+	{%for i in less_items%}
+
+	<h3>{{i.store.name}}</h3>
+	<h5>{{i.name}}</h5>	
+	<h5>{{i.quantity}}</h5>
+	<h6>Is remaining</h6>	
+	<br>
+	<br>
+	{% endfor %}
+
+</body>
+</html>

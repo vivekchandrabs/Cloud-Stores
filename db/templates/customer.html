@@ -52,56 +52,57 @@
 					</div>
 					<br><br>
 					<div class="card  shadow-lg" style="width: 31rem;" style="padding-right:100px;">
-				<div class="card-body">
-						<div id="my-table">
-							<table class="table table-bordered " width="100%" >
-								<thead >
-									
-									<tr>
-										<td width="10px"><b>ID</b></td>
-										<td><b>Item Name</b></td>
-										<td><b>Quantity</b></td>
-										<td></td>
-									</tr>
-								</thead>
-								<tbody  id="table-body">
-									{% for k,v in cart.items %}
-									<tr>
-									<td width="10px">{{k.id}}</td>
-										<td>{{k.name}}</td>
-										<td>{{v}}</td>
-										<td></td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
+						<div class="card-body">
+							<div id="my-table">
+								<table class="table table-bordered " width="100%" >
+									<thead >
+										
+										<tr>
+											<td width="10px"><b>ID</b></td>
+											<td><b>Item Name</b></td>
+											<td><b>Quantity</b></td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody  id="table-body">
+										{% for k,v in cart.items %}
+											<tr>
+												<td width="10px">{{k.id}}</td>
+												<td>{{k.name}}</td>
+												<td>{{v}}</td>
+												<td><a href="/delete/{{storeid}}/{{k.id}}" style="color:red"><ion-icon name="close-circle"></ion-icon></a></td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
 						</div>
-					</div>
-
 					</div>
 					<br>
-					<a class="btn btn-md btn-outline-success" href="/sendemail/">Submit<span class="sr-only">(current)</span></a>
-				</div>
-				<div class="col-md-6">
-					<form method="POST">
-					<label>Customer Email:</label>
-					<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="email">
+					<form action="/checkout-customer/{{storeid}}/" method="POST">
+						{% csrf_token %}
+						<button class="btn btn-md btn-outline-success" type="submit">Submit<span class="sr-only">(current)</span></button>
+						
+					</div>
+					<div class="col-md-6">
+						<label>Customer Email:</label>
+						<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="email">
 					</form>
-
 					<div style="padding-top:50px">
-					<div class=" border-dark shadow-lg"  >
-					<div class="card" style="width: 38rem">
-						<div class="card-body" style="background-color:#c8d6e5;">
-							
-							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-							
+						<div class=" border-dark shadow-lg"  >
+							<div class="card" style="width: 38rem">
+								<div class="card-body" style="background-color:#c8d6e5;">
+									
+									<p class="card-text">{{message}}</p>
+									
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				</div>
 				</div>
 			</div>
 		</div>
+		<script src="https://unpkg.com/ionicons@4.4.6/dist/ionicons.js"></script>
 	</body>
 	
 </html>

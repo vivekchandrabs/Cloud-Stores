@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from dbapp.models import UserDetail,Store,Item,OrderShop,Order_Item,Cart
 from django.core.mail import EmailMessage
+# from django_postgres_extensions.models.functions import ArrayRemove
 
 from django.utils import timezone    
 
@@ -11,10 +12,20 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.utils import timezone
 from dbapp.render import Render
+
+from django.template.loader import get_template
+from django.template import Context
+
 l=list()
 		
-li=list()
+less_items=list()
+
+
+
 # Create your views here.
+def home(request):
+	return render(request,"home.html")
+
 def signup(request):
 	
 	if request.method == "POST":
@@ -24,6 +35,7 @@ def signup(request):
 		user_type=request.POST.get("user_type")
 		user_type=int(user_type)
 		print(user_type)
+		invitecode=request.POST.get('invitecode')
 		address=request.POST.get("address")
 		phone=request.POST.get("phone")
 		
@@ -32,26 +44,46 @@ def signup(request):
 			return render(request,'signup.html',{'show':'username already taken'})
 			
 		except:			
-			user = User.objects.create_user(username, email, password)
+			
 		
 			if user_type == 2:
 
+
+
+
 				storeid=request.POST.get('storeid')
+
 				print(storeid)
-				no_of_stores=0
-				
-				profile=UserDetail(user=user,user_type=user_type,
-									address=address,
-									no_of_stores=no_of_stores,
-									storeid=storeid,
-									phone_no=phone)
-				profile.save()
-				return redirect('/signin/') 
+				store=Store.objects.get(pk=storeid)
+
+				code=store.invitecode
+				print(code)
+
+
+				if invitecode == code :
+					print("ksfksdfndsn")
+					user = User.objects.create_user(username, email, password)
+					no_of_stores=0
+					
+					profile=UserDetail(user=user,user_type=user_type,
+										address=address,
+										no_of_stores=no_of_stores,
+										storeid=storeid,
+										phone_no=phone)
+					profile.save()
+
+					cart=Cart(shopkeeper=user)
+					cart.save()
+
+					return redirect('/signin/') 
+				else:
+					return HttpResponse('wrong invite code')
 
 			
 				
 				
 			elif user_type ==1:
+				user = User.objects.create_user(username, email, password)
 				no_of_stores=0
 				storeid=0
 				profile=UserDetail(user=user,
@@ -74,7 +106,9 @@ def signup(request):
 
 def signin(request):
 	user = request.user
+	print(user.is_authenticated)
 	if user.is_authenticated:
+		print(user.userdetail.user_type)
 		if user.userdetail.user_type == 1:
 			url='/'+username+'/owner/'
 			return redirect(url)
@@ -83,6 +117,7 @@ def signin(request):
 			storeid=str(storeid)
 			url='/shop/'+storeid+'/checkout/'
 			return redirect(url)
+	
 
 	if request.method == "POST":
 		username = request.POST['username']
@@ -212,12 +247,10 @@ def chooseshop(request,storeid):#this is the page where owner can choose the sho
 def choosestore(request,owner):
 	user=request.user
 	user=UserDetail.objects.get(user=user)
-	try:
-		storeofuser=Store.objects.filter(owner=user)
+	
+	storeofuser=Store.objects.filter(owner=user)
 
-		return render(request,'choosestore.html',{'user_name':owner,"show":''})
-	except:
-		return render(request,'choosestore.html',{'user_name':owner,"show":storeofuser})
+	return render(request,'choosestore.html',{'user_name':owner,"show":storeofuser})
 
 @login_required
 def orderitems(request,storeid,shopid):#this is the page where the owner can enter the item details
@@ -291,27 +324,33 @@ def deletestores(request,storeid):
 	url="/"+username+"/delete/"
 	return redirect(url)
 
-# def deletedistributer(request,shopid):
-# 	deletedistributer=OrderShop.objects.get(pk=shopid)
-# 	deletedistributer.delete()
-# 	print("deleted")
-# 	username=request.user.username
-# 	url="/"+username+"/delete/"
-# 	return redirect(url)
-# def checkout(request,storeid):
-# 	store=Store.objects.get(pk=storeid)
-# 	user=request.user
-# 	cart=Cart.objects.get(shopkeeper=user)
-# 	email=request.POST.get('email')
-# 	#render the template here and email
-	# storeitems=Item.objects.get(store=store)
-	# for i in cart.items:#this is the arraylist of arrayfield
-	# 	itemid=i[0]
-	# 	item=Item.objects.get(pk=itemid)
-	# 	item.quantity=item.quantity-i[1]
-	# 	item.save()
-	# 	msg = EmailMessage("Purchase Order", message, to=[email])
-	# 	msg.send()
+@login_required
+def delete_item_from_cart(request,store_id, item_id):
+	user = request.user
+	cart = Cart.objects.get(shopkeeper=user)
+	items = cart.items
+	for item in items:
+		if item[0] == int(item_id):
+			items.remove(item)
+	cart.save()
+
+	return redirect(f"/shop/{store_id}/checkout")
+
+@login_required
+def checkout(request,storeid):
+	store=Store.objects.get(pk=storeid)
+	user=request.user
+	cart=Cart.objects.get(shopkeeper=user)
+	email=request.POST.get('email')
+	#render the template here and email
+	storeitems=Item.objects.get(store=store)
+	for i in cart.items:#this is the arraylist of arrayfield
+		itemid=i[0]
+		item=Item.objects.get(pk=itemid)
+		item.quantity=item.quantity-i[1]
+		item.save()
+		msg = EmailMessage("Purchase Order", message, to=[email])
+		msg.send()
 
 
 
@@ -321,72 +360,41 @@ def customer(request,storeid):
 	store=Store.objects.get(pk=storeid)
 	user=request.user
 	shopkeeper = UserDetail.objects.get(storeid=storeid,user=user, user_type=2)
-
+	message=''
 	if request.user != shopkeeper.user:
 		return redirect("/")
 	
-	cart=Cart.objects.get(shopkeeper=user)
-	citems = cart.items
-	cart={Item.objects.get(store=store, id=citem[0]):citem[1] for citem in citems}
-	items = Item.objects.filter(store=store)
+	
 	if request.method=="POST":
 		itemid=int(request.POST.get("itemname"))
 		quantity=int(request.POST.get("quantity"))
-		username=str(user)
-		del l[:]
-		l.append(itemid)
-		l.append(quantity)
-		try:
-			del l[:]
-			cart=Cart.objects.get(shopkeeper=username)
-			l.append(itemid)
-			l.append(quantity)
-			cart.items.append(l)
+		
+		cart=Cart.objects.get(shopkeeper=user)
+
+		item_quantity=Item.objects.get(store=store,id=itemid)
+		q=int(item_quantity.quantity)-quantity
+		if q<0 :
+			message="ONLY "+str(item_quantity.quantity)+" units of "+item_quantity.name+" left"
+		else:
+
+			cart.items.append([itemid, quantity])
 			cart.save()
+			message=''
 
+	cart=Cart.objects.get(shopkeeper=user)
+	citems = cart.items
+	if citems is not None:
 
-
-			print(cart.items)
-
-			
-		except:
-			# items_dic={}
-			# items_dic[itemid]=quantity
-			del l[:]
-			l.append(itemid)
-			l.append(quantity)
-			
-
-
-			cart=Cart(shopkeeper=username,items=[])
-			cart.save()
-			print(cart.items)
-			cart=Cart.objects.get(shopkeeper=username)
-			cart.items.append(l)
-			cart.save()
-			print(cart.items)
+		cart={Item.objects.get(store=store, id=citem[0]):citem[1] for citem in citems}
+	items = Item.objects.filter(store=store)
 	
 
 
-	
+	return render(request,"customer.html",{'items':items,'storeid':storeid, "cart":cart,'message':message})
 
 
-	return render(request,"customer.html",{'items':items,'storeid':storeid, "cart":cart})
 
 
-def generate_pdf(pk):
-	y = 700
-	buffer = BytesIO()
-	p = canvas.Canvas(buffer, pagesize=letter)
-	p.setFont('Helvetica', 10)
-	k=""
-	j=k.join(pk)
-	p.drawString(220, y, j)
-	p.showPage()
-	p.save()
-	pdf = buffer.getvalue()
-	buffer.close()
-	return pdf
 
 
 def sendemail(request):
@@ -409,30 +417,51 @@ def sendemail(request):
 	msg.content_subtype = "html"
 	msg.send()
 	
-
-	# message="this is the message of the django email"
-	# Subject="this is the Subject"
-	# email = EmailMessage(Subject,message, to=['vivek.dexter.301096@gmail.com'])
-	# fd = open('NS.pdf', 'rb')
-	# email.attach('NS.pdf', pdf, 'application/pdf')
-   
-	# res = email.send()
-	
-	# email.send()
 	return HttpResponse("success")
 
-
-# def get() request):
-#        sales="the"
-#        today = timezone.now()
-#        params = {
-#             'today': today,
-#             'sales': sales,
-#             'request': request
-#         }
-#         return Render.render('pdf.html', params)
 
 def signout(request):
 	user = request.user
 	logout(request)
-	return redirect('/')
+	return redirect('/signin/')
+
+def checkoutcust(request, storeid):
+	store=Store.objects.get(pk=storeid)
+	
+	email = request.POST.get('email')
+	ocart = Cart.objects.get(shopkeeper=request.user)
+	citems = ocart.items
+	cart={Item.objects.get(store=store, id=citem[0]):[citem[1]] for citem in citems}
+
+	total = 0
+	del less_items[:]
+	for item, details in cart.items():
+		item.quantity=item.quantity-details[0]
+		item.save()
+
+		x = details[0]*item.price
+		details.append(x)
+		cart[item] = details
+		total += x
+
+		if (item.quantity) < 7:
+			less_items.append(item)
+	#write the email to be sent to the owner code here
+	message=get_template('email/notice.html').render({'less_items':less_items})
+	storeowner_email=store.owner.user.email
+	print(storeowner_email)
+	msg = EmailMessage(f"Cash Bill from {store.name}", message, to=[storeowner_email])
+	msg.content_subtype = "html"
+	msg.send()
+
+
+	message = get_template('email/bill.html').render({'cart':cart, 'total':total, 'store':store, 'email':email})
+	msg = EmailMessage(f"Cash Bill from {store.name}", message, to=[email])
+	msg.content_subtype = "html"
+	msg.send()
+
+
+	ocart.items = []
+	ocart.save()
+
+	return redirect(f"/shop/{storeid}/checkout/")

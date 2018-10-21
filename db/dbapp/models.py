@@ -25,6 +25,7 @@ class UserDetail(models.Model):
 class Store(models.Model):
 	name=models.CharField(blank=True,max_length=100)
 	owner=models.ForeignKey(UserDetail,on_delete=models.CASCADE)
+	invitecode=models.CharField(blank=True,max_length=100)
 
 
 class Item(models.Model):
@@ -51,12 +52,11 @@ class Order_Item(models.Model):#this is for the customer side item table.
 	quantity=models.IntegerField(default=0)
 	itemname=models.CharField(blank=True,max_length=100)
 
-
-
-
 class Cart(models.Model):
-	shopkeeper=models.CharField(max_length=100,blank=True)
-	items=ArrayField(ArrayField(models.IntegerField(blank=True)),size=500)
+	shopkeeper=models.ForeignKey(User,on_delete=models.CASCADE)
+	items=ArrayField(ArrayField(models.IntegerField(blank=True),null=True),size=500,blank=True,default=[])
+
+
 
 
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<style type="text/css">
+		body {
+			font-family: 'Arial', sans-serif;
+		}
+			table, th, td {
+		text-align: right;
+		border: 1px solid black;
+		padding: 5px;
+		width:600px;
+		}
+		</style>
+	</head>
+	<body>
+		<h1></h1>
+		<table>
+			<thead>
+				<tr>
+					
+					<td colspan="5" style="text-align:center"><h1 style="line-height:0">{{store.name}}</h1></td>
+				</tr>
+				<tr>
+					<td colspan="5" style="text-align:center">
+						<h3 style="line-height:0">Cash Bill</h3>
+						<p style="font-size:12px">Sent to: {{email}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td width="10px"><b>ID</b></td>
+					<td><b>Item Name</b></td>
+					<td><b>Price/Unit</b></td>
+					<td><b>Quantity</b></td>
+					<td><b>Total Price</b></td>
+				</tr>
+			</thead>
+			<tbody  id="table-body">
+				{% for k,v in cart.items %}
+					<tr>
+						<td width="10px">{{k.id}}</td>
+						<td>{{k.name}}</td>
+						<td>₹{{k.price}}</td>
+						<td>{{v.0}}</td>
+						<td>₹{{v.1}}</td>
+					</tr>
+				{% endfor %}
+				<tr>
+					
+					<td colspan="4"><b>Total</b></td>
+					<td><b>₹{{total}}</b></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

@@ -21,8 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-   
-    path('',views.signin),
+    path('',views.home),
     path('signin/',views.signin),
     path('signup/',views.signup),
     path('logout/', views.signout),
@@ -38,7 +37,10 @@ urlpatterns = [
     path('sendemail/',views.sendemail),
     path('<slug:owner>/delete/',views.deleteshop),
     path('<int:storeid>/deletestores/',views.deletestores),
-    
+    path('delete/<int:store_id>/<int:item_id>/', views.delete_item_from_cart),
+    path('checkout-customer/<int:storeid>/', views.checkoutcust),
     path('shop/<int:storeid>/checkout/',views.customer),
+    
+    
 
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

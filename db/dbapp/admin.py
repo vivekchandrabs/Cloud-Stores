@@ -1,5 +1,5 @@
 from django.contrib import admin
-from dbapp.models import UserDetail,Store,Item,Cart,OrderShop,Order_Item
+from dbapp.models import *
 # Register your models here.
 
 admin.site.register(UserDetail)
