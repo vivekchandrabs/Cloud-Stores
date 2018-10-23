@@ -47,7 +47,7 @@
 									</select>
 								</div>
 								<div class="col-3">
-									<input type="text" class="form-control" id="item-quant" placeholder="Quantity" name="quantity">
+									<input type="text" class="form-control" id="item-quant" placeholder="Quantity" name="quantity" required>
 								</div>
 								<div class="col-3">
 									<button type="submit" class="btn btn-md btn-outline-primary" id="item-add">Add</button>
@@ -66,18 +66,25 @@
 											<td width="10px"><b>ID</b></td>
 											<td><b>Item Name</b></td>
 											<td><b>Quantity</b></td>
+											<td><b>Price</b></td>
 											<td></td>
 										</tr>
 									</thead>
 									<tbody  id="table-body">
 										{% for k,v in cart.items %}
-											<tr>
+											<tr style="text-align:right">
 												<td width="10px">{{k.id}}</td>
 												<td>{{k.name}}</td>
-												<td>{{v}}</td>
+												<td>{{v.0}}</td>
+												<td>₹{{v.1}}</td>
+												
 												<td><a href="/delete/{{storeid}}/{{k.id}}" style="color:red"><ion-icon name="close-circle"></ion-icon></a></td>
 											</tr>
 										{% endfor %}
+										<tr style="text-align:right">
+											<td colspan="3"><b>Total</b></td>
+											<td colspan="1"><b>₹{{total_price}}</b></td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -91,7 +98,7 @@
 					</div>
 					<div class="col-md-6">
 						<label>Customer Email:</label>
-						<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="email">
+						<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="email" required>
 					</form>
 					<div style="padding-top:50px">
 						<div class=" border-dark shadow-lg"  >

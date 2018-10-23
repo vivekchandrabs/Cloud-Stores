@@ -54,7 +54,7 @@ class Order_Item(models.Model):#this is for the customer side item table.
 
 class Cart(models.Model):
 	shopkeeper=models.ForeignKey(User,on_delete=models.CASCADE)
-	items=ArrayField(ArrayField(models.IntegerField(blank=True),null=True),size=500,blank=True,default=[])
+	items=ArrayField(ArrayField(models.IntegerField(blank=True),null=True),size=500,blank=True,default=list([]))
 
 
 

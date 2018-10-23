@@ -38,16 +38,16 @@
 						
 						
 						<label for="exampleInputEmail1">Username</label>
-						<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" name="username">
+						<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" name="username" required>
 						<h6 style="color:#EA2027;">{{show}}</h6>
 						<br>
 						<label for="exampleInputEmail1">Email address</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email" required>
 						
 						<br>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Password</label>
-							<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+							<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required>
 							<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 						</div>
 						
@@ -65,16 +65,16 @@
 						<br>
 						<br>
 						<label>Invite Code</label>
-						<input type="text" name="invitecode" class="form-control" onchange="schedule(this.value)" placeholder="Enter The Invitecode" id="invite">
+						<input type="text" name="invitecode" class="form-control" onchange="schedule(this.value)" placeholder="Enter The Invitecode" id="invite" required>
 						{% if notice %}
 							<h6 style="color:#EA2027;">{{notice}}</h6>
 						{% endif %}
 						
 						<label for="exampleInputEmail1" style="padding-top:10px">Address</label>
-						<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Address" name="address">
+						<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Address" name="address" required>
 						<br>
 						<label for="exampleInputEmail1">phone</label>
-						<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter phone number" name="phone">
+						<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter phone number" name="phone" required>
 						
 						<br>
 						

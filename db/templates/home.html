@@ -7,40 +7,49 @@
 		<link rel="icon" href="{% static 'images/store.png' %}" type="image/png" sizes="16x16">
 		<link href='https://fonts.googleapis.com/css?family=Fira Sans' rel='stylesheet'>
 		<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+		<style>
+		.centered {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Fira Sans;
+
+}
+			
+		</style>
 	</head>
-	<body>
+	<body >
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
 				<a class="navbar-brand" href="/"><img src="{% static 'images/store.png' %}" height="30px"> Stores</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 				</button>
+				<a class="nav-item nav-link active" href="/about/">About Us<span class="sr-only">(current)</span></a>
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 					<div class="navbar-nav  mr-auto">
 						
 					</div>
 					<div class="navbar-nav">
 						<a class="btn btn-outline-success inline-block mb-3 mb-md-0 ml-md-5" href="/signin/" >Signin<span class="sr-only">(current)</span></a>
+						<a class="btn btn-outline-success inline-block mb-3 mb-md-0 ml-md-5" href="/signup/" >Signup<span class="sr-only">(current)</span></a>
 						
 						
 					</div>
 				</div>
 			</div>
 		</nav>
-		<div style="text-align:center" class="container">
-			<br><br>
-			<div class="card  shadow-lg" style="width: 70rem;">
-				<div class="card-body" style="background-color:#f1f2f6;">
-					
-					<p style="font-size:40px;text-align:justify">
-					<b><i>Cloud Stores is an inventory manager. Helps you to manage your stores at a single place by sending. Sends notification about the availability of the products in the stores and will help you to ensure all time availability of the products for customers and keep them happy.</i></b>
-					</p>
-					
-				</div>
-			</div>
-			<br>
-			
-			<a type="button" class="btn btn-outline-primary btn-lg" href="/signup/">Sign Up</a>
+
+
+	<div class="conatiner">
+		<div style="text-align:center">
+
+		<img src="{% static 'images/homestore.jpg' %}" height="665px" width="900px" style="border:1px solid black;">
+		 <div class="centered"><h1><I><B><U>HANDLE ALL YOUR STORES AT ONE PLACE</U></B></I></h1></div>
 		</div>
+	</div>
+		
+		
 	</body>
 </html>

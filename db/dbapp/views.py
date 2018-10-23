@@ -25,6 +25,8 @@ less_items=list()
 # Create your views here.
 def home(request):
 	return render(request,"home.html")
+def about(request):
+	return render(request,"aboutus.html")
 
 def signup(request):
 	
@@ -376,12 +378,16 @@ def customer(request,storeid):
 	citems = cart.items
 	if citems is not None:
 
-		cart={Item.objects.get(store=store, id=citem[0]):citem[1] for citem in citems}
+		cart={Item.objects.get(store=store, id=citem[0]):[citem[1],Item.objects.get(store=store,id=citem[0]).price] for citem in citems}
+		sum=0
+		for i,v in cart.items():
+			sum+=v[1]*v[0]
+
 	items = Item.objects.filter(store=store)
 	
 
 
-	return render(request,"customer.html",{'items':items,'storeid':storeid, "cart":cart,'message':message})
+	return render(request,"customer.html",{'items':items,'storeid':storeid, "cart":cart,'message':message,'total_price':sum})
 
 
 
