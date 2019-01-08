@@ -16,7 +16,7 @@ from dbapp.render import Render
 from django.template.loader import get_template
 from django.template import Context
 
-from dbapp.money_divider import money1
+import dbapp.money_divider  as j
 
 l=list()
 
@@ -427,7 +427,7 @@ def signout(request):
 
 def checkoutcust(request, storeid):
 	store=Store.objects.get(pk=storeid)
-	money=request.POST.get('money')
+	money=int(request.POST.get('money'))
 	email = request.POST.get('email')
 	ocart = Cart.objects.get(shopkeeper=request.user)
 	citems = ocart.items
@@ -446,9 +446,14 @@ def checkoutcust(request, storeid):
 
 		if (item.quantity) < 7:
 			less_items.append(item)
+	change=int(abs(total-money))
+	mo=j.money1()
+	mo.refill()
+	mo.fill(change)
+	mo.go()
+	new_para=mo.printing()
+	print(new_para)
 
-
-	
 	#write the email to be sent to the owner code here
 	message=get_template('email/notice.html').render({'less_items':less_items})
 	storeowner_email=store.owner.user.email
