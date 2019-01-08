@@ -17,6 +17,7 @@ from django.template.loader import get_template
 from django.template import Context
 
 l=list()
+
 		
 less_items=list()
 
