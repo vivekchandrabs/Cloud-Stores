@@ -1,5 +1,9 @@
 body
 		{
-			background-color: #c8d6e5;
+			/*background-color: #c8d6e5;*/
 			font-family: Fira Sans;
+			background-image: url("/static/images/blur.png");
+			background-size: cover;
+
 		}
+
