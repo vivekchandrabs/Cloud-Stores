@@ -397,27 +397,27 @@ def customer(request,storeid):
 
 
 
-def sendemail(request):
-	username=request.user.username
-	cart=Cart.objects.get(shopkeeper=username)
-	pk=cart.items
-	# pk="message in the pdf"
-	sales=1
-	today = timezone.now()
-	params = {
-	'today': today,
-	'sales': sales,
-	'request': request
-				}
-	pdf=Render.render('pdf.html', params)
+# def sendemail(request):
+# 	username=request.user.username
+# 	cart=Cart.objects.get(shopkeeper=username)
+# 	pk=cart.items
+# 	# pk="message in the pdf"
+# 	sales=1
+# 	today = timezone.now()
+# 	params = {
+# 	'today': today,
+# 	'sales': sales,
+# 	'request': request
+# 				}
+# 	pdf=Render.render('pdf.html', params)
 
-	# pdf = generate_pdf(pk)
-	msg = EmailMessage("title", "content", to=["vivek.dexter.301096@gmail.com"])
-	msg.attach('my_pdf.pdf', pdf, 'application/pdf')
-	msg.content_subtype = "html"
-	msg.send()
+# 	# pdf = generate_pdf(pk)
+# 	msg = EmailMessage("title", "content", to=["vivek.dexter.301096@gmail.com"])
+# 	msg.attach('my_pdf.pdf', pdf, 'application/pdf')
+# 	msg.content_subtype = "html"
+# 	msg.send()
 	
-	return HttpResponse("success")
+# 	return HttpResponse("success")
 
 
 def signout(request):
@@ -446,6 +446,14 @@ def checkoutcust(request, storeid):
 
 		if (item.quantity) < 7:
 			less_items.append(item)
+			#write the email to be sent to the owner code here
+			message=get_template('email/notice.html').render({'less_items':less_items})
+			storeowner_email=store.owner.user.email
+			print(storeowner_email)
+			msg = EmailMessage(f"Product Notification {store.name}", message, to=[storeowner_email])
+			msg.content_subtype = "html"
+			msg.send()
+
 	change=int(abs(total-money))
 	mo=j.money1()
 	mo.refill()
@@ -453,23 +461,17 @@ def checkoutcust(request, storeid):
 	mo.go()
 	new_para=mo.printing()
 	print(new_para)
-
-	#write the email to be sent to the owner code here
-	message=get_template('email/notice.html').render({'less_items':less_items})
-	storeowner_email=store.owner.user.email
-	print(storeowner_email)
-	msg = EmailMessage(f"Product Notification {store.name}", message, to=[storeowner_email])
-	msg.content_subtype = "html"
-	msg.send()
-
-
+	print("sending email to customer")
 	message = get_template('email/bill.html').render({'cart':cart, 'total':total, 'store':store, 'email':email})
 	msg = EmailMessage(f"Cash Bill from {store.name}", message, to=[email])
 	msg.content_subtype = "html"
 	msg.send()
-
+	print("email sent")
 
 	ocart.items = []
 	ocart.save()
 
-	return redirect(f"/shop/{storeid}/checkout/")
+	items=Item.objects.filter(store=storeid)
+	return render(request,"customer.html",{'items':items,'show':new_para,"storeid":storeid})
+
+	# return redirect(f"/shop/{storeid}/checkout/")
