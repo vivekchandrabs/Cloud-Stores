@@ -24,9 +24,9 @@
 						
 					</div>
 					<div class="navbar-nav">
-							
+						
 						<a class="btn btn-outline-success" href="/logout/"  style="float-right">Logout<span class="sr-only">(current)</span></a>
-						</div>
+					</div>
 				</div>
 			</div>
 		</nav>
@@ -99,17 +99,40 @@
 					<div class="col-md-6">
 						<label>Customer Email:</label>
 						<input type="Email" class="form-control" id="item-quant" placeholder="Customer email id" name="email" required>
-					</form>
-					<div style="padding-top:50px">
-						<div class=" border-dark shadow-lg"  >
-							<div class="card" style="width: 38rem">
-								<div class="card-body" style="background-color:#c8d6e5;">
-									
-									<p class="card-text">{{message}}</p>
-									
+						
+						<div style="padding-top:50px">
+							<div class=" border-dark shadow-lg"  >
+								<div class="card" style="width: 38rem">
+									<div class="card-body" style="background-color:#c8d6e5;">
+										
+										<p class="card-text">{{message}}</p>
+										
+									</div>
 								</div>
 							</div>
 						</div>
+						<div style="padding-top:30px">
+							<label>Money Receieved:</label>
+							<input type="Email" class="form-control" id="item-quant" placeholder="Enter Money receieved from the Customer" name="money" required>
+						</div>
+					</form>
+					<div style="padding-top:10px">
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Currency</th>
+									<th scope="col">Nos'</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for i,k in show.items%}
+								<tr>
+									<td>{{i}}</td>
+									<td>{{k}}</td>
+								</tr>
+								{%endfor%}
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
