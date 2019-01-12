@@ -13,8 +13,22 @@
 				  display: inline-block;
 			}
 		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+		function effect()
+		{
+		$(document).ready(function(){
+			$("#fade_card").fadeOut(0.5);
+			$("#fade_card").fadeIn(1000);
+
+		});
+		}
+
+		
+
+		</script>
 	</head>
-	<body >
+	<body onload="effect()">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
 				<a class="navbar-brand" href="/{{user_name}}/owner/"><img src="{% static 'images/store.png' %}" height="30px"> Stores</a>
@@ -50,7 +64,7 @@
 			<div class="card shadow-lg" style="width: 70rem; ">
 				<div class="card-body" >
 					{% for i in show%}
-						<div class="card border-dark md-3" style="width: 22rem;display:inline-block; margin-bottom:10px;">
+						<div class="card border-dark md-3" id="fade_card" style="width: 22rem;display:inline-block; margin-bottom:10px;">
 							
 							<div class="card-body" style="background-color:#f1f2f6;">
 								<h5 class="card-title" style="text-align:center"><b>{{i.name}}</b></h5>
