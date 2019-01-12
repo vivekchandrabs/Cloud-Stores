@@ -18,8 +18,8 @@
 		function effect()
 		{
 		$(document).ready(function(){
-			$("#fade_card").fadeOut(0.5);
-			$("#fade_card").fadeIn(1000);
+			$(".card").fadeOut(0.5);
+			$(".card").fadeIn(1000);
 
 		});
 		}
@@ -64,7 +64,7 @@
 			<div class="card shadow-lg" style="width: 70rem; ">
 				<div class="card-body" >
 					{% for i in show%}
-						<div class="card border-dark md-3" id="fade_card" style="width: 22rem;display:inline-block; margin-bottom:10px;">
+						<div class="card border-dark md-3"  style="width: 22rem;display:inline-block; margin-bottom:10px;">
 							
 							<div class="card-body" style="background-color:#f1f2f6;">
 								<h5 class="card-title" style="text-align:center"><b>{{i.name}}</b></h5>
