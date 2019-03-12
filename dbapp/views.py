@@ -101,17 +101,20 @@ def signup(request):
 
 
 def signin(request):
+
 	user = request.user
 	print(user.is_authenticated)
+
 	if user.is_authenticated:
+
 		username=request.user.username
 		print(user.userdetail.user_type)
 		if user.userdetail.user_type == 1:
-			url='/'+username+'/owner/'
+			url = '/' + username + '/owner/'
 			return redirect(url)
 		else:
-			storeid=user.userdetail.storeid
-			storeid=str(storeid)
+			storeid = user.userdetail.storeid
+			storeid = str(storeid)
 			url='/shop/'+storeid+'/checkout/'
 			return redirect(url)
 	
