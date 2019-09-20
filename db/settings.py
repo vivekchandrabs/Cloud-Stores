@@ -110,12 +110,12 @@ AUTH_PASSWORD_VALIDATORS = [
 	{
 		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
 	},
-]
+] 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'inventorydjango@gmail.com'
+EMAIL_HOST_USER = 'revexp101@gmail.com'
 EMAIL_HOST_PASSWORD = 'projectdjango'
 EMAIL_PORT = 587
 
