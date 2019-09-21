@@ -22,10 +22,16 @@ class UserDetail(models.Model):
 	storeid=models.IntegerField(default=0)
 	phone_no=models.CharField(max_length=13)
 
+	def __str__(self):
+		return self.user.username
+
 class Store(models.Model):
 	name=models.CharField(blank=True,max_length=100)
 	owner=models.ForeignKey(UserDetail,on_delete=models.CASCADE)
 	invitecode=models.CharField(blank=True,max_length=100)
+
+	def __str__(self):
+		return self.name
 
 
 class Item(models.Model):
@@ -35,6 +41,8 @@ class Item(models.Model):
 	price=models.IntegerField(default=0)
 	store=models.ForeignKey(Store,on_delete=models.CASCADE)
 
+	def __str__(self):
+		return self.name
 
 class OrderShop(models.Model):#this is for the order distrubuter
 	store=models.ForeignKey(Store,on_delete=models.CASCADE)
@@ -44,6 +52,8 @@ class OrderShop(models.Model):#this is for the order distrubuter
 	shopkeeper_name=models.CharField(blank=True,max_length=100)
 	phone_no=models.CharField(blank=True,default=0,max_length=100)
 
+	def __str__(self):
+		return self.name_shop
 
 
 class Order_Item(models.Model):#this is for the customer side item table.
@@ -52,9 +62,13 @@ class Order_Item(models.Model):#this is for the customer side item table.
 	quantity=models.IntegerField(default=0)
 	itemname=models.CharField(blank=True,max_length=100)
 
+	def __str__(self):
+		return self.itemname
+
 class Cart(models.Model):
 	shopkeeper=models.ForeignKey(User,on_delete=models.CASCADE)
 	items=ArrayField(ArrayField(models.IntegerField(blank=True),null=True),size=500,blank=True,default=list([]))
+
 
 
 
